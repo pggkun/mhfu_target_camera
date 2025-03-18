@@ -13,7 +13,7 @@ Use `L` + `DpadUp` to enable target camera. When target camera is enabled, press
 Pressing `L` + `DpadDown` will disable the mod.
 
 ## Notes: 
-For now, it only works on the European version `ULES-01213`, but I plan to implement it for the American `ULUS-10391` and Japanese `ULJM-05500` versions as well. It's working on PPSSPP and has also been tested on a PSP 2000 using TempAR (unfortunately, for some reason, CWCheat causes some crashes).
+For now, it only works on the Japanese `ULJM-05500` and European version `ULES-01213`, but I plan to implement it for the American `ULUS-10391` version as well. It's working on PPSSPP and has also been tested on a PSP 2000 using TempAR (unfortunately, for some reason, CWCheat causes some crashes).
 
 There's also no way to switch targets for now, it only selects the first available target in the map or area.
 
