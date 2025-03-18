@@ -12,6 +12,7 @@ $(CHEAT_FILE):
 	mkdir -p bin
 	armips src/target_cam_mhfu_eu.asm
 	armips src/target_cam_mhp2ndg.asm
+	armips src/target_change_mhp2ndg.asm
 	python3 gencwcheat.py
 
 modio:

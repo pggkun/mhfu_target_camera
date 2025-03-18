@@ -1,15 +1,20 @@
 .psp
 
-.createfile "./bin/TARGET_CAM_JP.bin", 0x8800000
+PLAYER_COORDINATES equ 0x09CFE480
+MONSTER_POINTER equ 0x09C0D3C0
+SELECTED equ 0x08800AA0
+
+.createfile "./bin/TARGET_CAM_JP.bin", 0x9FF7E00
 	addiu		sp, sp, -0x18
 	sv.q		c000, 0x8(sp)
 	sw			ra, 0x4(sp)
-	lui   t0, 0x090B
-	ori t0, t0, 0x90A0
+	lui   t0, (PLAYER_COORDINATES >> 16)
+	ori   t0, t0, (PLAYER_COORDINATES & 0xFFFF)
 	lv.s  S000, 0(t0)
 	lv.s  S001, 8(t0)
 
-	li   		t0, 0x09C0D3C0
+	li			t1, SELECTED
+	lw			t0, 0(t1)
 
 	lw			t6, 0(t0)
 	beq   		t6, zero, no_monster
@@ -72,11 +77,12 @@
 	ori   t0, t0, 0x8F00
 	sh	v0, 0(t0)
 	move a0, v0
-	j 	0x09FF7F00
+	j 	ret
 	nop
 
 no_monster:
 	lw	a0,0x1F4(s3)
+ret:
 	lw			ra, 0x4(sp)
 	addiu		ra, ra, 0xC
 	lv.q		c000, 0x8(sp)
