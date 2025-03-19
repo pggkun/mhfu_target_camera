@@ -3,6 +3,12 @@
 PLAYER_COORDINATES equ 0x09CFE480
 MONSTER_POINTER equ 0x09C0D3C0
 SELECTED equ 0x08800AA0
+PLAYER_AREA equ 0x090AF41A
+
+.macro lio,reg, value
+    lui   reg, (value >> 16)
+	ori   reg, reg, (value & 0xFFFF)
+.endmacro
 
 .createfile "./bin/TARGET_CAM_JP.bin", 0x9FF7E00
 	addiu		sp, sp, -0x18
@@ -13,12 +19,22 @@ SELECTED equ 0x08800AA0
 	lv.s  S000, 0(t0)
 	lv.s  S001, 8(t0)
 
-	li			t1, SELECTED
-	lw			t0, 0(t1)
+	li			t1, SELECTED 
+	lw			t0, 0(t1) 
 
-	lw			t6, 0(t0)
+	lw			t6, 0(t0) 
 	beq   		t6, zero, no_monster
-	nop 
+	nop
+
+	move		t0, t6 
+	addiu		t0, t0, 0x29A 
+	lb			t3, 0(t0) 
+
+	lio			t4, PLAYER_AREA
+	lb			t5, 0(t4)
+
+	bne   		t3, t5, no_monster
+	nop
 
 	lw		t1, 0x40(t6)
 
