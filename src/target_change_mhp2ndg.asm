@@ -18,7 +18,7 @@ MONSTER_POINTER equ 0x09C0D3C0
 	sv.q		c000, 0x8(sp)
 	sw			ra, 0x4(sp)
 
-    lio    t0, SELECTED 
+    lio   t0, SELECTED 
     lw    t1, 0(t0)       
     bne   t1, $zero, check_pointer
     nop
@@ -28,13 +28,31 @@ MONSTER_POINTER equ 0x09C0D3C0
     sw    t1, 0(t0)
 
 check_pointer:
+    lio   t0, SELECTED 
+    lw    t1, 0(t0) 
+    lw    t2, 0(t1) 
+    bne   t2, $zero, no_update_need 
+    nop
 
+    li    t4, 0x1  
+    addi  t1, t1, 4
+
+check_loop:
+    lw    t2, 0(t1) 
+    bne   t2, $zero, update_to_new 
+    nop
+    addi  t1, t1, 4
+    addi  t4, t4, 1
+    blt   t4, 4, check_loop
+    nop
+    j need_to_reset
+
+update_to_new:
     lio   t0, SELECTED
-    lw    t1, 0(t0)
-    lw    t2, 0(t1)
-    bne   t2, $zero, no_update_need
-    nop    
+    sw    t1, 0(t0)
+    j no_update_need
 
+need_to_reset:
     lio   t0, SELECTED
     lio   t1, 0x09C0D3C0
     sw    t1, 0(t0)
