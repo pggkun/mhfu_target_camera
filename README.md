@@ -15,20 +15,27 @@ Pressing `L` + `DpadDown` will disable the mod.
 ## Notes: 
 For now, it only works on the Japanese `ULJM-05500` and European version `ULES-01213`, but I plan to implement it for the American `ULUS-10391` version as well. It's working on PPSSPP and has also been tested on a PSP 2000 using TempAR (unfortunately, for some reason, CWCheat causes some crashes).
 
-### MHP2ndG (ULJM-05500)
+### MHP2ndG (ULJM-05500, also compatible with FUComplete)
 - [x] Target Cam
 - [x] Change target with `L + DpadLeft` or `L + DpadRight`
 - [x] Check if the selected target is in the same area
+- [x] HUD with Monster Icons
+- [ ] Crosshair
 
 ### MHFU-EU (ULES-01213)
 - [x] Target Cam
 - [ ] Change target with `L + DpadLeft` or `L + DpadRight`
 - [ ] Check if the selected target is in the same area
+- [ ] HUD with Monster Icons
+- [ ] Crosshair
 
 ### MHFU-US (ULUS-10391)
 - [ ] Target Cam
 - [ ] Change target with `L + DpadLeft` or `L + DpadRight`
 - [ ] Check if the selected target is in the same area
+- [ ] HUD with Monster Icons
+- [ ] Crosshair
 
 ## Credits: 
-This project was created by adapting the [MHP3rd Target Cam](https://github.com/Kurogami2134/mhp3rd_target_camera.git) by Kurogami2134, a much more advanced project that even has a UI.
+- Thanks to [Kurogami2134](https://github.com/Kurogami2134), that created [MHP3rd Target Cam](https://github.com/Kurogami2134/mhp3rd_target_camera.git) which was the base code for this project.
+- Thanks to [IncognitoMan](https://github.com/IncognitoMan), that provided the monster ID list.

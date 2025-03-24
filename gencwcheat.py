@@ -1,5 +1,21 @@
 from cwcheatio import CwCheatIO
 
+def divide_file(filepath, amount):
+    with open(filepath, 'rb') as f:
+        content = f.read()
+
+    total_size = len(content)
+    part_size = total_size // amount
+
+    for i in range(amount):
+        start = i * part_size
+
+        end = (i + 1) * part_size if i < amount - 1 else total_size
+        file.write(f"Target Cam [{i+5}/{amount+4}]")
+        file.write(content[start:end])
+    
+
+
 #=======================================================
 # ULES-01213
 #=======================================================
@@ -25,27 +41,27 @@ file.close()
 #=======================================================
 file = CwCheatIO("ULJM-05500.TXT")
 file.seek(0x9FF7E00)
-file.write("Target Cam [1/5]")
+amount = 20
+
+file.write(f"Target Cam [1/{amount+4}]")
 with open("bin/TARGET_CAM_JP.bin", "rb") as bin:
     file.write(bin.read())
 
-file.write("Target Cam [2/5]")
+file.write(f"Target Cam [2/{amount+4}]")
 file.write(
     "_L 0xD0000001 0x10000110\n"
     "_L 0x200871F8 0x0A7FDF80\n"
 )
-file.write("Target Cam [3/5]")
+file.write(f"Target Cam [3/{amount+4}]")
 file.write(
     "_L 0xD0000001 0x10000140\n"
     "_L 0x200871F8 0x8E6401F4\n"
 )
 file.seek(0x9FF7f40)
-file.write("Target Cam [4/5]")
+file.write(f"Target Cam [4/{amount+4}]")
 file.write(
     "_L 0x20069408 0x0A7FDFD0\n"
 )
-file.write("Target Cam [5/5]")
-with open("bin/TARGET_CHANGE_JP.bin", "rb") as bin:
-    file.write(bin.read())
+divide_file("bin/TARGET_CHANGE_JP.bin", amount)
 
 file.close()
