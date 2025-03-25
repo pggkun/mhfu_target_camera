@@ -2,6 +2,7 @@
 
 PLAYER_COORDINATES equ 0x09CFE480
 MONSTER_POINTER equ 0x09C0D3C0
+MOD_TRIGGER equ 0x0891C910
 SELECTED equ 0x0891C908
 PLAYER_AREA equ 0x090AF41A
 
@@ -14,6 +15,12 @@ PLAYER_AREA equ 0x090AF41A
 	addiu		sp, sp, -0x18
 	sv.q		c000, 0x8(sp)
 	sw			ra, 0x4(sp)
+
+	li	$t1, MOD_TRIGGER
+	lw      $t2, 0($t1)
+	lio	$t3, 0xFFFFFFFF
+	bne	$t2, $t3, no_monster
+
 	lui   t0, (PLAYER_COORDINATES >> 16)
 	ori   t0, t0, (PLAYER_COORDINATES & 0xFFFF)
 	lv.s  S000, 0(t0)

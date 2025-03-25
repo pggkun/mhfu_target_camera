@@ -11,7 +11,7 @@ def divide_file(filepath, amount):
         start = i * part_size
 
         end = (i + 1) * part_size if i < amount - 1 else total_size
-        file.write(f"Target Cam [{i+5}/{amount+4}]")
+        file.write(f"Target Cam [{i+4}/{amount+3}]")
         file.write(content[start:end])
     
 
@@ -43,22 +43,16 @@ file = CwCheatIO("ULJM-05500.TXT")
 file.seek(0x0891C920)
 amount = 20
 
-file.write(f"Target Cam [1/{amount+4}]")
+file.write(f"Target Cam [1/{amount+3}]")
 with open("bin/TARGET_CAM_JP.bin", "rb") as bin:
     file.write(bin.read())
 
-file.write(f"Target Cam [2/{amount+4}]")
+file.write(f"Target Cam [2/{amount+3}]")
 file.write(
-    "_L 0xD0000001 0x10000110\n"
     "_L 0x200871F8 0x0A247248\n"
 )
-file.write(f"Target Cam [3/{amount+4}]")
-file.write(
-    "_L 0xD0000001 0x10000140\n"
-    "_L 0x200871F8 0x8E6401F4\n"
-)
 file.seek(0x0891CAA0)
-file.write(f"Target Cam [4/{amount+4}]")
+file.write(f"Target Cam [3/{amount+3}]")
 file.write(
     "_L 0x20069408 0x0A2472A8\n"
 )

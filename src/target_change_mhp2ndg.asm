@@ -3,8 +3,12 @@
 BUTTON_L equ 0x00000100
 BUTTON_DPAD_RIGHT equ 0x00000020
 BUTTON_DPAD_LEFT equ 0x00000080
+BUTTON_DPAD_UP equ 0x00000010
+BUTTON_DPAD_DOWN equ 0x00000040
+
 SELECTED equ 0x0891C908
 TRIGGER equ 0x0891C90C
+MOD_TRIGGER equ 0x0891C910
 BUTTONS_ADDR equ 0x08A5DD38
 MONSTER_POINTER equ 0x09C0D3C0
 PLAYER_AREA equ 0x090AF41A
@@ -39,6 +43,40 @@ icon_y equ 225
 	addiu	sp, sp, -0x18
 	sv.q	c000, 0x8(sp)
 	sw	ra, 0x4(sp)
+
+        ;=========================================
+        li	t0, BUTTONS_ADDR
+	lw	t1, 0(t0)
+
+	li	t2, BUTTON_L | BUTTON_DPAD_UP
+	and	t3, t1, t2
+	beq	t3, t2, activate_mod
+	nop
+
+        li	t2, BUTTON_L | BUTTON_DPAD_DOWN
+	and	t3, t1, t2
+	beq	t3, t2, deactivate_mod
+	nop
+
+        j mod_stay
+        nop
+
+activate_mod:
+        li	t0, MOD_TRIGGER
+	li	t1, 0xFFFFFFFF
+	sw	t1, 0(t0)
+        j mod_stay
+        nop
+
+deactivate_mod:
+        li	t0, MOD_TRIGGER
+	li	t1, 0x00000000
+	sw	t1, 0(t0)
+        j mod_stay
+        nop
+
+mod_stay:	
+        ;==============================
 
 	lio	t0, SELECTED 
 	lw	t1, 0(t0)	
@@ -167,12 +205,30 @@ not_less:
 ret:
 	sh	a0,-0x22B6(v1)
 
-	lio $t1, 0x88871F8	; target cam is active
-	lw $t2, 0($t1)	; carrega o byte em $t2
-	lio $t3, 0x8E6401F4	; valor esperado
-	beq $t2, $t3, skip_draw	; se for diferente, pula
+	;lio $t1, 0x88871F8	; target cam is active
+	;lw $t2, 0($t1)	; carrega o byte em $t2
+	;lio $t3, 0x8E6401F4	; valor esperado
+	;beq $t2, $t3, skip_draw	; se for diferente, pula
+
+        li	$t1, MOD_TRIGGER
+        lw      $t2, 0($t1)
+        lio	$t3, 0xFFFFFFFF
+        bne	$t2, $t3, skip_draw
+
 	nop
-	
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+	nop
+        nop
+        nop
+        nop
 
 monster_icon:
 	;skip if loading
