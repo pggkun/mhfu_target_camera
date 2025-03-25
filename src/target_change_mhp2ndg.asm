@@ -3,8 +3,8 @@
 BUTTON_L equ 0x00000100
 BUTTON_DPAD_RIGHT equ 0x00000020
 BUTTON_DPAD_LEFT equ 0x00000080
-SELECTED equ 0x08800C00
-TRIGGER equ 0x08800C04
+SELECTED equ 0x0891C908
+TRIGGER equ 0x0891C90C
 BUTTONS_ADDR equ 0x08A5DD38
 MONSTER_POINTER equ 0x09C0D3C0
 PLAYER_AREA equ 0x090AF41A
@@ -16,6 +16,15 @@ PLAYER_AREA equ 0x090AF41A
 ;tamanho: 9FF9390 - 9FF7E00 = 0x1590
 ;endereço final =  891EE70 + 0x1590 = 8920400
 
+sceGeListEnQueue equ 0x0890BC50
+
+VERTEX_0 equ 0x0891C8F0
+VERTEX_1 equ 0x0891C8F4
+VERTEX_2 equ 0x0891C8F8
+VERTEX_3 equ 0x0891C8FC
+VERTEX_4 equ 0x0891C900
+VERTEX_5 equ 0x0891C904
+
 .include "./src/gpu_macros.asm"
 
 icon_x equ 0
@@ -26,7 +35,7 @@ icon_y equ 225
 	ori	reg, reg, (value & 0xFFFF)
 .endmacro
 
-.createfile "./bin/TARGET_CHANGE_JP.bin", 0x9FF7F40
+.createfile "./bin/TARGET_CHANGE_JP.bin", 0x0891CAA0
 	addiu	sp, sp, -0x18
 	sv.q	c000, 0x8(sp)
 	sw	ra, 0x4(sp)
@@ -197,27 +206,27 @@ monster_icon:
 
         ; setup vertices
 	li $t0, 0x00B40024	
-	li $t1, 0x08801600	
+	li $t1, VERTEX_0	
 	sw $t0, 0($t1)	
 
 	li $t0, 0x00089Ce6	
-	li $t1, 0x08801604	
+	li $t1, VERTEX_1	
 	sw $t0, 0($t1)	
 
 	li $t0, 0x000000E4	
-	li $t1, 0x08801608	
+	li $t1, VERTEX_2	
 	sw $t0, 0($t1)	
 
 	li $t0, 0x00D80048	
-	li $t1, 0x0880160C	
+	li $t1, VERTEX_3	
 	sw $t0, 0($t1)	
 
 	li $t0, 0x002C9Ce6	
-	li $t1, 0x08801610	
+	li $t1, VERTEX_4	
 	sw $t0, 0($t1)	
 
 	li $t0, 0x00000108	
-	li $t1, 0x08801614	
+	li $t1, VERTEX_5	
 	sw $t0, 0($t1)	
 
 	li t0, SELECTED
@@ -537,847 +546,847 @@ monster_icon:
 
 velociprey:
 	li t0, 0x00000000	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00240024	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 genprey:
 	li t0, 0x00000024	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00240048	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 ioprey:
 	li t0, 0x00000048	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x0024006C	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 velocidrome:
 	li t0, 0x0000006C	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00240090	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 gendrome:
 	li t0, 0x00000090	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x002400B4	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 iodrome:
 	li t0, 0x000000B4	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x002400D8	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 kelbi:
 	li t0, 0x000000D8	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x002400FC	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 kut_ku:
 	li t0, 0x00240000	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00480024	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 blue_kut_ku:
 	li t0, 0x00240000	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00480024	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 gypceros:
 	li t0, 0x00240024	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00480048	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 purple_gypceros:
 	li t0, 0x00240024	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00480048	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 cephadrome:
 	li t0, 0x00240048	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x0048006C	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 cephalos:
 	li t0, 0x00240048	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x0048006C	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 plesioth:
 	li t0, 0x0024006C	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00480090	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 green_plesioth:
 	li t0, 0x0024006C	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00480090	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 rathalos:
 	li t0, 0x00240090	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x004800B4	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 azure_rathalos:
 	li t0, 0x00240090	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x004800B4	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 silver_rathalos:
 	li t0, 0x00240090	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x004800B4	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 rathian:
 	li t0, 0x002400B4	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x004800D8	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 pink_rathian:
 	li t0, 0x002400B4	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x004800D8	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 gold_rathian:
 	li t0, 0x002400B4	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x004800D8	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 vespoid:
 	li t0, 0x002400D8	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x004800FC	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 vespoid_queen:
 	li t0, 0x002400D8	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x004800FC	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 khezu:
 	li t0, 0x00480000	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x006C0024	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 red_khezu:
 	li t0, 0x00480000	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x006C0024	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 gravios:
 	li t0, 0x00480024	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x006C0048	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 black_gravios:
 	li t0, 0x00480024	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x006C0048	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 basarios:
 	li t0, 0x00480048	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x006C006C	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 monoblos:
 	li t0, 0x0048006C	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x006C0090	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 white_monoblos:
 	li t0, 0x0048006C	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x006C0090	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 diablos:
 	li t0, 0x00480090	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x006C00B4	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 black_diablos:
 	li t0, 0x00480090	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x006C00B4	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 kirin:
 	li t0, 0x004800B4	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x006C00D8	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 hornetaur:
 	li t0, 0x004800D8	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x006C00FC	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 lao_shan_lung:
 	li t0, 0x006C0000	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00900024	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 ashen_lao_shan_lung:
 	li t0, 0x006C0000	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00900024	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 yian_garuga:
 	li t0, 0x006C0024	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00900048	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 one_ear_yian_garuga:
 	li t0, 0x006C0024	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00900048	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 bulfango:
 	li t0, 0x006C0048	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x0090006C	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 bulldrome:
 	li t0, 0x006C0048	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x0090006C	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 blangonga:
 	li t0, 0x006C006C	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00900090	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 copper_blangonga:
 	li t0, 0x006C006C	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00900090	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 great_thunderbug:
 	li t0, 0x006C0090	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x009000B4	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 rajang:
 	li t0, 0x006C00B4	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x009000D8	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 furious_rajang:
 	li t0, 0x006C00B4	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x009000D8	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 apceros:
 	li t0, 0x006C00D8	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x009000FC	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 hermitaur:
 	li t0, 0x00900000	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00B40024	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 daimyo_hermitaur:
 	li t0, 0x00900000	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00B40024	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 plum_daimyo_hermitaur:
 	li t0, 0x00900000	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00B40024	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 ceanataur:
 	li t0, 0x00900024	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00B40048	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 shogun_ceanataur:
 	li t0, 0x00900024	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00B40048	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 terra_shogun_ceanataur:
 	li t0, 0x00900024	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00B40048	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 kushala:
 	li t0, 0x00900048	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00B4006C	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 rusted_kushala:
 	li t0, 0x00900048	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00B4006C	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 chameleos:
 	li t0, 0x0090006C	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00B40090	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 lunastra:
 	li t0, 0x00900090	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00B400B4	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 teostra:
 	li t0, 0x009000B4	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00B400D8	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 aptonoth:
 	li t0, 0x009000D8	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00B400FC	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 tigrex:
 	li t0, 0x00B40000	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00D80024	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 congalala:
 	li t0, 0x00B40048	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00D8006C	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 emerald_congalala:
 	li t0, 0x00B40048	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00D8006C	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 blango:
 	li t0, 0x00B40090	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00D800B4	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 conga:
 	li t0, 0x00B400B4	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00D800D8	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 felyne:
 	li t0, 0x00B400D8	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00D800FC	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 melynx:
 	li t0, 0x00D80000	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00FC0024	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 mosswine:
 	li t0, 0x00D80024	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00FC0048	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 giaprey:
 	li t0, 0x00D80048	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00FC006C	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 giadrome:
 	li t0, 0x00D8006C	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00FC0090	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 remobra:
 	li t0, 0x00D80090	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00FC00B4	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 anteka:
 	li t0, 0x00D800B4	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00FC00D8	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 popo:
 	li t0, 0x00D800D8	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x00FC00FC	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 lavasioth:
 	li t0, 0x00FC0000	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x01200024	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 hypnocatrice:
 	li t0, 0x00FC0024	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x01200048	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 yamatsukami:
 	li t0, 0x00FC0048	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x0120006C	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 shakalaka:
 	li t0, 0x00FC006C	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x01200090	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 shengaoren:
 	li t0, 0x00FC0090	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x012000B4	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 	
 
 nargacuga:
 	li t0, 0x00FC00B4	;uv start	
-	li t1, 0x08801600	
+	li t1, VERTEX_0	
 	sw t0, 0(t1)
 
 	li t0, 0x012000D8	;uv end	
-	li t1, 0x0880160C	
+	li t1, VERTEX_3	
 	sw t0, 0(t1)
 	j check_monster
 
@@ -1394,29 +1403,29 @@ check_monster:
 	nop
 
 	li t0, 0xFFFF	;light	
-	li t1, 0x08801604	
+	li t1, VERTEX_1	
 	sh t0, 0(t1)
 
 	li t0, 0xFFFF	;light	
-	li t1, 0x08801610	
+	li t1, VERTEX_4	
 	sh t0, 0(t1)
 
 	j draw_crosshair
 
 darken_icon:
 	li t0, 0x9Ce6	;dark	
-	li t1, 0x08801604	
+	li t1, VERTEX_1	
 	sh t0, 0(t1)
 
 	li t0, 0x9Ce6	;dark	
-	li t1, 0x08801610	
+	li t1, VERTEX_4	
 	sh t0, 0(t1)
 
 draw_crosshair:
 	li	a0, gpu_code
 	li	a2, 0
 	li	a3, 0
-	jal	0x0890BC50; sceGeListEnQueue
+	jal	sceGeListEnQueue; 
 	li	a1, 0x0
 
 skip_draw:
@@ -1451,7 +1460,7 @@ gpu_code:
 	.word 0x50000001 ; Shade: 1 (gouraud)
 	.word 0x12800116 ; SetVertexType: through, u16 texcoords, ABGR 1555 colors, s16 positions
 	.word 0x10080000 ; BASE: high=08
-	vaddr	0x801600
+	vaddr	0x91C8F0
 	.word 0x04060002 ; DRAW PRIM RECTANGLES: count= 2 vaddr= 08a88714
 	finish
 	end

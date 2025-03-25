@@ -2,7 +2,7 @@
 
 PLAYER_COORDINATES equ 0x09CFE480
 MONSTER_POINTER equ 0x09C0D3C0
-SELECTED equ 0x08800C00
+SELECTED equ 0x0891C908
 PLAYER_AREA equ 0x090AF41A
 
 .macro lio,reg, value
@@ -10,7 +10,7 @@ PLAYER_AREA equ 0x090AF41A
 	ori   reg, reg, (value & 0xFFFF)
 .endmacro
 
-.createfile "./bin/TARGET_CAM_JP.bin", 0x9FF7E00
+.createfile "./bin/TARGET_CAM_JP.bin", 0x0891C920
 	addiu		sp, sp, -0x18
 	sv.q		c000, 0x8(sp)
 	sw			ra, 0x4(sp)

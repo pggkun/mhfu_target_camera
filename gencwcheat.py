@@ -40,7 +40,7 @@ file.close()
 # ULJM-05500
 #=======================================================
 file = CwCheatIO("ULJM-05500.TXT")
-file.seek(0x9FF7E00)
+file.seek(0x0891C920)
 amount = 20
 
 file.write(f"Target Cam [1/{amount+4}]")
@@ -50,17 +50,17 @@ with open("bin/TARGET_CAM_JP.bin", "rb") as bin:
 file.write(f"Target Cam [2/{amount+4}]")
 file.write(
     "_L 0xD0000001 0x10000110\n"
-    "_L 0x200871F8 0x0A7FDF80\n"
+    "_L 0x200871F8 0x0A247248\n"
 )
 file.write(f"Target Cam [3/{amount+4}]")
 file.write(
     "_L 0xD0000001 0x10000140\n"
     "_L 0x200871F8 0x8E6401F4\n"
 )
-file.seek(0x9FF7f40)
+file.seek(0x0891CAA0)
 file.write(f"Target Cam [4/{amount+4}]")
 file.write(
-    "_L 0x20069408 0x0A7FDFD0\n"
+    "_L 0x20069408 0x0A2472A8\n"
 )
 divide_file("bin/TARGET_CHANGE_JP.bin", amount)
 
