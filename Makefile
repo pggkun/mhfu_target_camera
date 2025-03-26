@@ -32,12 +32,21 @@ armips:
 
 	install -Dm755 $(BUILD_DIR)/armips $(INSTALL_DIR)/armips
 
+patch:
+	python3 patcher.py
+	gcc tools/UMD-replace.c -o umd_replace
+	ls -la
+	./umd_replace "$$(ls *.iso | head -n1)" /PSP_GAME/SYSDIR/EBOOT.BIN "$$(ls patched_* | head -n1)"
+	
 deps: armips modio
 
 clean:
+	rm -rf *.txt *.TXT
+	rm -rf bin
+	rm -rf umd_replace*
+
+full_clean: clean
 	rm -rf armips
 	rm -rf modio
 	rm -rf build
 	rm -rf cwcheatio*
-	rm -rf *.txt *.TXT
-	rm -rf bin

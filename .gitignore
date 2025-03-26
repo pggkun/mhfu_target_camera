@@ -2,5 +2,7 @@ bin/
 modio/
 armips/
 *.txt
+*.bin
+*.iso
 cwcheatio.py
 __pycache__
