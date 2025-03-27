@@ -2,6 +2,10 @@
 
 Adds target camera, similar to that of Monster Hunter 4 to Monster Hunter Freedom Unite.
 
+
+https://github.com/user-attachments/assets/60e6eac8-78c3-409e-9dfa-8d25134f9aff
+
+
 ## Compiling
 
 In a Linux environment, you will need Make and CMake. Use `make deps` to install the dependencies and `make` to generate the binaries and the text file.
