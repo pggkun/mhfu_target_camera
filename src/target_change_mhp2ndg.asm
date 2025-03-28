@@ -1458,6 +1458,68 @@ check_monster:
 	bne	t3, t5, darken_icon
 	nop
 
+	;=============================
+	;world to screen
+	;=============================
+	li		t1, SELECTED
+
+	lw		t0, 0(t1)
+	lw		t6, 0(t0)
+	lw		t1, 0x40(t6)
+
+	vone.q  c500
+	lv.s  S500, 0x40(t6) ;input x
+	lv.s  S501, 0x44(t6) ;input y
+	lv.s  S502, 0x48(t6) ;input z
+
+	vdot.q c600, r100, c500
+	vdot.q c610, r101, c500
+	vdot.q c620, r102, c500
+	vdot.q c630, r103, c500
+
+	vzero.q  c500
+
+	li	t0,	0x3f9b8c00
+	mtv	t0, s500
+
+	li	t0, 0x40093eff
+	mtv	t0, s511
+
+	li	t0, 0xbf800000
+	mtv	t0, s522
+
+	li	t0, 0xbf800000
+	mtv	t0, s532
+
+	li	t0, 0xc2700000
+	mtv	t0, s523
+
+	vtfm4.q r601, M500, r600
+
+	vdiv.s s602, s601, s631
+	vdiv.s s612, s611, s631
+	vdiv.s s622, s621, s631
+
+	li	t0, 0x43f00000
+	mtv	t0, s600
+
+	li	t0, 0x43880000
+	mtv	t0, s610
+
+	li	t0, 0x3f000000
+	mtv	t0, s620
+
+	vadd.s s602, s602, s630
+	vmul.s s602, s602, s620
+	vmul.s s602, s602, s600 ;result x
+
+	vsub.s s612, s630, s612
+	vmul.s s612, s612, s620
+	vmul.s s612, s612, s610 ;result y
+
+	;TODO: draw a crosshair while a counter is greater than zero
+	;=============================
+
 	li t0, 0xFFFF	;light	
 	li t1, VERTEX_1	
 	sh t0, 0(t1)
