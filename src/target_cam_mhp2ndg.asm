@@ -5,6 +5,7 @@ MONSTER_POINTER equ 0x09C0D3C0
 MOD_TRIGGER equ 0x0891C910
 SELECTED equ 0x0891C908
 PLAYER_AREA equ 0x09A40C38
+TIMER equ 0x0891C620
 
 .macro lio,reg, value
     lui   reg, (value >> 16)
@@ -103,9 +104,14 @@ PLAYER_AREA equ 0x09A40C38
 	j 	ret
 	nop
 
+
 no_monster:
 	lw	a0,0x1F4(s3)
 ret:
+	li   $t0, 30 
+	li   $t1, TIMER 
+	sw   $t0, 0($t1)
+
 	lw			ra, 0x4(sp)
 	addiu		ra, ra, 0xC
 	lv.q		c000, 0x8(sp)

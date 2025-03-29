@@ -13,12 +13,7 @@ BUTTONS_ADDR equ 0x08A5DD38
 MONSTER_POINTER equ 0x09C0D3C0
 PLAYER_AREA equ 0x09A40C38
 
-;TODO: change base_addr to 0x0891C8F0
-;start here 11AE70 + 08804000 = 891EE70
-;inicio = 9FF7E00
-;fim =    9FF9390
-;tamanho: 9FF9390 - 9FF7E00 = 0x1590
-;endereço final =  891EE70 + 0x1590 = 8920400
+TIMER equ 0x0891C620
 
 sceGeListEnQueue equ 0x0890BC50
 
@@ -28,6 +23,13 @@ VERTEX_2 equ 0x0891C8F8
 VERTEX_3 equ 0x0891C8FC
 VERTEX_4 equ 0x0891C900
 VERTEX_5 equ 0x0891C904
+
+VCROSS_0 equ 0x0891E2C0
+VCROSS_1 equ 0x0891E2C4
+VCROSS_2 equ 0x0891E2C8
+VCROSS_3 equ 0x0891E2CC
+VCROSS_4 equ 0x0891E2D0
+VCROSS_5 equ 0x0891E2D4
 
 .include "./src/gpu_macros.asm"
 
@@ -44,9 +46,19 @@ icon_y equ 225
 	sv.q	c000, 0x8(sp)
 	sw	ra, 0x4(sp)
 
-        ;=========================================
-        li	t0, BUTTONS_ADDR
+	;=========================================
+	lio   $t1, TIMER
+	lw   $t2, 0($t1)
+	beqz $t2, skip_subtract
+	nop
+
+	addi $t2, $t2, -1
+	sw   $t2, 0($t1)
+skip_subtract:
+
+    li	t0, BUTTONS_ADDR
 	lw	t1, 0(t0)
+	;=======================================
 
 	li	t2, BUTTON_L | BUTTON_DPAD_UP
 	and	t3, t1, t2
@@ -62,7 +74,7 @@ icon_y equ 225
         nop
 
 activate_mod:
-        li	t0, MOD_TRIGGER
+    li	t0, MOD_TRIGGER
 	li	t1, 0xFFFFFFFF
 	sw	t1, 0(t0)
         j mod_stay
@@ -216,19 +228,7 @@ ret:
         bne	$t2, $t3, skip_draw
 
 	nop
-        nop
-        nop
-        nop
-        nop
-        nop
-        nop
-        nop
-        nop
-        nop
-	nop
-        nop
-        nop
-        nop
+
 
 monster_icon:
 	;skip if loading
@@ -260,7 +260,9 @@ monster_icon:
 	beq	t6, zero, skip_draw
 	nop
 
-        ; setup vertices
+	;==========================================
+    ; setup vertices
+	; monster icon
 	li $t0, 0x00B40024	
 	li $t1, VERTEX_0	
 	sw $t0, 0($t1)	
@@ -289,6 +291,31 @@ monster_icon:
 	lw t1, 0(t0)
 	lw t0, 0(t1)
 	lb t1, 0x1e8(t0)
+
+	;crosshair
+	li $t0, 0x00100068	
+	li $t2, VCROSS_0	
+	sw $t0, 0($t2)	
+
+	li $t0, 0x0033FFFF	
+	li $t2, VCROSS_1	
+	sw $t0, 0($t2)	
+
+	li $t0, 0x00000035	
+	li $t2, VCROSS_2	
+	sw $t0, 0($t2)	
+
+	li $t0, 0x001E0076
+	li $t2, VCROSS_3	
+	sw $t0, 0($t2)	
+
+	li $t0, 0x0041FFFF	
+	li $t2, VCROSS_4	
+	sw $t0, 0($t2)	
+
+	li $t0, 0x00000043	
+	li $t2, VCROSS_5	
+	sw $t0, 0($t2)	
 
 	beq t1, 16, velociprey
 	nop
@@ -1461,22 +1488,41 @@ check_monster:
 	;=============================
 	;world to screen
 	;=============================
+
 	li		t1, SELECTED
 
 	lw		t0, 0(t1)
 	lw		t6, 0(t0)
 	lw		t1, 0x40(t6)
 
+	;cleaning matrix M500 and M600
+	vzero.q c500
+	vzero.q c510
+	vzero.q c520
+	vzero.q c530
+
+	vzero.q c600
+	vzero.q c610
+	vzero.q c620
+	vzero.q c630
+
 	vone.q  c500
 	lv.s  S500, 0x40(t6) ;input x
+
 	lv.s  S501, 0x44(t6) ;input y
+	li	t0, 0x42c80000 ; offset +100
+	mtv	t0, s602
+	vadd.s S501, S501, s602
+	
 	lv.s  S502, 0x48(t6) ;input z
 
+	;view @ position (using vdot because view matrix is transposed)
 	vdot.q c600, r100, c500
 	vdot.q c610, r101, c500
 	vdot.q c620, r102, c500
 	vdot.q c630, r103, c500
 
+	;loading projetion matrix values
 	vzero.q  c500
 
 	li	t0,	0x3f9b8c00
@@ -1494,8 +1540,10 @@ check_monster:
 	li	t0, 0xc2700000
 	mtv	t0, s523
 
+	; projection @ (view @ position)
 	vtfm4.q r601, M500, r600
 
+	;ndc convertion
 	vdiv.s s602, s601, s631
 	vdiv.s s612, s611, s631
 	vdiv.s s622, s621, s631
@@ -1509,17 +1557,71 @@ check_monster:
 	li	t0, 0x3f000000
 	mtv	t0, s620
 
+	;ndc to screen coordinates
 	vadd.s s602, s602, s630
 	vmul.s s602, s602, s620
-	vmul.s s602, s602, s600 ;result x
+	vmul.s s602, s602, s600 
 
 	vsub.s s612, s630, s612
 	vmul.s s612, s612, s620
-	vmul.s s612, s612, s610 ;result y
+	vmul.s s612, s612, s610 
 
-	;TODO: draw a crosshair while a counter is greater than zero
-	;=============================
+	vf2in.s  s602, s602, 0 ;result x
+	vf2in.s  s612, s612, 0 ;result y
 
+	mfv t0, s602
+	mfv t1, s612
+
+	blt $t0, 0 + 7, not_on_screen
+	nop
+	bgt $t0, 480 - 7, not_on_screen
+	nop
+
+	blt $t1, 0 + 7, not_on_screen
+	nop
+	bgt $t1, 272 - 7, not_on_screen
+	nop
+
+	li   $t0, 0xAA 
+	li   $t1, TIMER
+	sb   $t0, 0x4($t1)
+	j on_screen;
+
+
+not_on_screen:
+	li   $t0, 0xFF 
+	li   $t1, TIMER
+	sb   $t0, 0x4($t1)
+
+	j skip_crosshair
+	nop
+
+on_screen:
+
+	mfv t0, s602
+	addi $t0, $t0, -7
+	li $t1, VCROSS_1	
+	sh $t0, 0x2($t1)	
+
+	mfv t0, s612
+	addi $t0, $t0, -7	
+	li $t1, VCROSS_2	
+	sh $t0, 0($t1)	
+
+
+	mfv t0, s602
+	addi $t0, $t0, 7
+	;li $t0, 0x0041FFFF	
+	li $t1, VCROSS_4	
+	sh $t0, 2($t1)	
+
+	mfv t0, s612
+	addi $t0, $t0, 7
+	;li $t0, 0x00000043	
+	li $t1, VCROSS_5	
+	sh $t0, 0($t1)	
+
+skip_crosshair:
 	li t0, 0xFFFF	;light	
 	li t1, VERTEX_1	
 	sh t0, 0(t1)
@@ -1541,6 +1643,22 @@ darken_icon:
 
 draw_crosshair:
 	li	a0, gpu_code
+	li	a2, 0
+	li	a3, 0
+	jal	sceGeListEnQueue; 
+	li	a1, 0x0
+
+	lio   $t1, TIMER
+	lw   $t2, 0($t1)
+	beqz $t2, skip_draw
+	nop
+
+	li		t0, 0xFF
+	lb		$t2, 4($t1)
+	beq		$t2, t0, skip_draw
+	nop
+
+	li	a0, gpu_code2
 	li	a2, 0
 	li	a3, 0
 	jal	sceGeListEnQueue; 
@@ -1579,6 +1697,25 @@ gpu_code:
 	.word 0x12800116 ; SetVertexType: through, u16 texcoords, ABGR 1555 colors, s16 positions
 	.word 0x10080000 ; BASE: high=08
 	vaddr	0x91C8F0
+	.word 0x04060002 ; DRAW PRIM RECTANGLES: count= 2 vaddr= 08a88714
+	finish
+	end
+gpu_code2:
+	.word 0xA01527A0 ; Texture address 0: low=1527a0
+	.word 0xA8090100 ; Texture stride 0: 0x0100, address high=09
+	.word 0xB8000808 ; Texture size 0: 512x256
+	.word 0xC500FF03 ; Clut format: 00ff03 (ABGR 8888)
+	.word 0xB01627b0 ; CLUT addr: low=1627b0
+	.word 0xB1090000 ; CLUT addr: high=09
+	.word 0xC4000020 ; Clut load: 091627b0, 1024 bytes
+	.word 0xCB000000 ; TexFlush
+	.word 0x10080000 ; BASE: high=08
+	.word 0x1E000001 ; Texture map enable: 1
+	.word 0xC9000100 ; TexFunc 0 RGBA modulate
+	.word 0x50000001 ; Shade: 1 (gouraud)
+	.word 0x12800116 ; SetVertexType: through, u16 texcoords, ABGR 1555 colors, s16 positions
+	.word 0x10080000 ; BASE: high=08
+	vaddr	VCROSS_0 - 0x08000000
 	.word 0x04060002 ; DRAW PRIM RECTANGLES: count= 2 vaddr= 08a88714
 	finish
 	end
