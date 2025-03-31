@@ -1,19 +1,24 @@
 from cwcheatio import CwCheatIO
 
 def divide_file(filepath, amount):
+    ALIGNMENT = 0x20
     with open(filepath, 'rb') as f:
         content = f.read()
 
     total_size = len(content)
-    part_size = total_size // amount
+    part_size = (total_size // amount) & ~(ALIGNMENT - 1)
 
     for i in range(amount):
         start = i * part_size
+        end = start + part_size if i < amount - 1 else total_size
 
-        end = (i + 1) * part_size if i < amount - 1 else total_size
+        chunk = content[start:end]
+        if i < amount - 1 and len(chunk) % ALIGNMENT != 0:
+            pad = ALIGNMENT - (len(chunk) % ALIGNMENT)
+            chunk += b'\x00' * pad
+
         file.write(f"Target Cam [{i+4}/{amount+3}]")
-        file.write(content[start:end])
-    
+        file.write(chunk)  
 
 
 #=======================================================
@@ -40,9 +45,14 @@ def divide_file(filepath, amount):
 # ULJM-05500
 #=======================================================
 file = CwCheatIO("ULJM-05500.TXT")
-file.seek(0x0891C920)
-amount = 20
 
+amount = 20
+file.seek(0x0891E2C0)
+file.write(f"Target Cam [0/{amount+3}]")
+with open("bin/VERTEX.bin", "rb") as bin:
+    file.write(bin.read())
+
+file.seek(0x0891C920)
 file.write(f"Target Cam [1/{amount+3}]")
 with open("bin/TARGET_CAM_JP.bin", "rb") as bin:
     file.write(bin.read())
