@@ -33,13 +33,25 @@ VCROSS_5 equ 0x0891E2D4
 
 .include "./src/gpu_macros.asm"
 
-icon_x equ 0
-icon_y equ 225
+icon_x equ 30
+icon_y equ 55
 
 .macro lio,reg, value
 	lui	reg, (value >> 16)
 	ori	reg, reg, (value & 0xFFFF)
 .endmacro
+
+.createfile "./bin/VERTEX.bin", 0x0891E2C0
+.align 0x10
+vertices:
+    vertex      104, 16, 0xFFFFFF7F, icon_x - 10, icon_y, 0
+    vertex      118, 30, 0xFFFFFF7F, icon_x + 10, icon_y, 0
+    vertex      118, 16, 0xFFFFFF7F, icon_x, icon_y  - 10, 0
+
+    vertex      104, 16, 0xFFFFFF7F, icon_x  - 10, icon_y, 0
+    vertex      104, 30, 0xFFFFFF7F, icon_x, icon_y + 10, 0
+    vertex      118, 30, 0xFFFFFF7F, icon_x + 10, icon_y, 0
+.close
 
 .createfile "./bin/TARGET_CHANGE_JP.bin", 0x0891CAA0
 	addiu	sp, sp, -0x18
@@ -293,6 +305,7 @@ monster_icon:
 	lb t1, 0x1e8(t0)
 
 	;crosshair
+	/*
 	li $t0, 0x00100068	
 	li $t2, VCROSS_0	
 	sw $t0, 0($t2)	
@@ -316,6 +329,7 @@ monster_icon:
 	li $t0, 0x00000043	
 	li $t2, VCROSS_5	
 	sw $t0, 0($t2)
+	*/
 
 
 	;list_size equ 0x004D
@@ -459,14 +473,14 @@ check_monster:
 	mfv t0, s602
 	mfv t1, s612
 
-	blt $t0, 0 + 7, not_on_screen
+	blt $t0, 0 + 20, not_on_screen
 	nop
-	bgt $t0, 480 - 7, not_on_screen
+	bgt $t0, 480 - 20, not_on_screen
 	nop
 
-	blt $t1, 0 + 7, not_on_screen
+	blt $t1, 0 + 20, not_on_screen
 	nop
-	bgt $t1, 272 - 7, not_on_screen
+	bgt $t1, 272 - 20, not_on_screen
 	nop
 
 	li   $t0, 0xAA 
@@ -484,29 +498,69 @@ not_on_screen:
 	nop
 
 on_screen:
+	;vertex      104, 16, 0xFFFFFFFF, icon_x - 10, icon_y, 0
+    ;vertex      118, 30, 0xFFFFFFFF, icon_x + 10, icon_y, 0
+    ;vertex      118, 16, 0xFFFFFFFF, icon_x, icon_y  - 10, 0
+
+    ;vertex      104, 16, 0xFFFFFFFF, icon_x  - 10, icon_y, 0
+    ;vertex      104, 30, 0xFFFFFFFF, icon_x, icon_y + 10, 0
+    ;vertex      118, 30, 0xFFFFFFFF, icon_x + 10, icon_y, 0
+
+	;adjust x
+	mfv t0, s602
+	addi $t0, $t0, -10
+	li $t1, VCROSS_0	
+	sh $t0, 0x8($t1)
 
 	mfv t0, s602
-	addi $t0, $t0, -7
-	li $t1, VCROSS_1	
-	sh $t0, 0x2($t1)	
-
-	mfv t0, s612
-	addi $t0, $t0, -7	
-	li $t1, VCROSS_2	
-	sh $t0, 0($t1)	
-
+	addi $t0, $t0, 10
+	li $t1, VCROSS_0	
+	sh $t0, 0x18($t1)
 
 	mfv t0, s602
-	addi $t0, $t0, 7
-	;li $t0, 0x0041FFFF	
-	li $t1, VCROSS_4	
-	sh $t0, 2($t1)	
+	li $t1, VCROSS_0	
+	sh $t0, 0x28($t1)
+
+	mfv t0, s602
+	addi $t0, $t0, -10
+	li $t1, VCROSS_0	
+	sh $t0, 0x38($t1)
+
+	mfv t0, s602
+	li $t1, VCROSS_0	
+	sh $t0, 0x48($t1)
+
+	mfv t0, s602
+	addi $t0, $t0, 10
+	li $t1, VCROSS_0	
+	sh $t0, 0x58($t1)					
+
+	;adjust y
+	mfv t0, s612
+	li $t1, VCROSS_0	
+	sh $t0, 0xa($t1)
 
 	mfv t0, s612
-	addi $t0, $t0, 7
-	;li $t0, 0x00000043	
-	li $t1, VCROSS_5	
-	sh $t0, 0($t1)	
+	li $t1, VCROSS_0	
+	sh $t0, 0x1a($t1)
+
+	mfv t0, s612
+	addi $t0, $t0, -10	
+	li $t1, VCROSS_0	
+	sh $t0, 0x2a($t1)
+
+	mfv t0, s612
+	li $t1, VCROSS_0	
+	sh $t0, 0x3a($t1)
+
+	mfv t0, s612
+	addi $t0, $t0, 10	
+	li $t1, VCROSS_0	
+	sh $t0, 0x4a($t1)
+
+	mfv t0, s612
+	li $t1, VCROSS_0	
+	sh $t0, 0x5a($t1)			
 
 skip_crosshair:
 	li t0, 0xFFFF	;light	
@@ -545,7 +599,7 @@ draw_crosshair:
 	nop
 
 	li		t0, 0xFF
-	lb		$t2, 4($t1)
+	lbu		$t2, 4($t1)
 	beq		$t2, t0, skip_draw
 	nop
 
@@ -585,7 +639,7 @@ gpu_code:
 	.word 0x1E000001 ; Texture map enable: 1
 	.word 0xC9000100 ; TexFunc 0 RGBA modulate
 	.word 0x50000001 ; Shade: 1 (gouraud)
-	.word 0x12800116 ; SetVertexType: through, u16 texcoords, ABGR 1555 colors, s16 positions
+	.word 0x12800116 ; SetVertexType: through, u16 texcoords, ABGR 1555 colors, s16 positions| vertex use 1280011E
 	.word 0x10080000 ; BASE: high=08
 	vaddr	0x91C8F0
 	.word 0x04060002 ; DRAW PRIM RECTANGLES: count= 2 vaddr= 08a88714
@@ -604,10 +658,12 @@ gpu_code2:
 	.word 0x1E000001 ; Texture map enable: 1
 	.word 0xC9000100 ; TexFunc 0 RGBA modulate
 	.word 0x50000001 ; Shade: 1 (gouraud)
-	.word 0x12800116 ; SetVertexType: through, u16 texcoords, ABGR 1555 colors, s16 positions
+	.word 0x1280011E ; SetVertexType: through, u16 texcoords, ABGR 1555 colors, s16 positions| vertex use 1280011E
 	.word 0x10080000 ; BASE: high=08
 	vaddr	VCROSS_0 - 0x08000000
-	.word 0x04060002 ; DRAW PRIM RECTANGLES: count= 2 vaddr= 08a88714
+	;.word 0x04060002 ; DRAW PRIM RECTANGLES: count= 2 vaddr= 08a88714
+	prim 3, 3
+	prim 3, 3
 	finish
 	end
 ;list_size equ 0x004D
