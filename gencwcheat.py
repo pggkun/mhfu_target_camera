@@ -17,28 +17,28 @@ def divide_file(filepath, amount):
             pad = ALIGNMENT - (len(chunk) % ALIGNMENT)
             chunk += b'\x00' * pad
 
-        file.write(f"Target Cam [{i+4}/{amount+3}]")
+        file.write(f"Target Cam [{i+5}/{amount+4}]")
         file.write(chunk)  
 
 file = CwCheatIO("ULJM-05500.TXT")
 
 amount = 20
 file.seek(0x0891E2C0)
-file.write(f"Target Cam [0/{amount+3}]")
+file.write(f"Target Cam [1/{amount+4}]")
 with open("bin/VERTEX.bin", "rb") as bin:
     file.write(bin.read())
 
 file.seek(0x0891C920)
-file.write(f"Target Cam [1/{amount+3}]")
+file.write(f"Target Cam [2/{amount+4}]")
 with open("bin/TARGET_CAM_JP.bin", "rb") as bin:
     file.write(bin.read())
 
-file.write(f"Target Cam [2/{amount+3}]")
+file.write(f"Target Cam [3/{amount+4}]")
 file.write(
     "_L 0x200871F8 0x0A247248\n"
 )
 file.seek(0x0891CAA0)
-file.write(f"Target Cam [3/{amount+3}]")
+file.write(f"Target Cam [4/{amount+4}]")
 file.write(
     "_L 0x20069408 0x0A2472A8\n"
 )
@@ -46,7 +46,7 @@ divide_file("bin/TARGET_CHANGE_JP.bin", amount)
 
 file.seek(0x0891D4B0)
 #file.seek(0x097E0000)
-file.write(f"crosshair")
+file.write(f"Target Cam [{amount+4}/{amount+4}]")
 with open("bin/crosshair.bin", "rb") as bin:
     file.write(bin.read())
 

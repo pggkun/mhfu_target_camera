@@ -167,7 +167,7 @@ vertices:
 
 	li		t0, CROSSHAIR_SRC
 	li		t1, CROSSHAIR_DES
-	li		t2, 1024
+	li		t2, 1024 + 32
 
 copy_loop:
 	lw		t3, 0(t0)
@@ -727,7 +727,7 @@ gpu_code2:
 	.word	0xA8090020 ; Texture stride 0: 0x0100, address high=09
 	.word	0xB8000505 ; Texture size 0: 32x32
 	.word	0xC500FF03 ; Clut format: 00ff03 (ABGR 8888)
-	.word	0xB01627b0 ; CLUT addr: low=1627b0
+	.word	0xB07E0400 ; CLUT addr: low=1627b0 (CROSSHAIR_DES + 0x400 -  0x9000000)
 	.word	0xB1090000 ; CLUT addr: high=09
 	.word	0xC4000020 ; Clut load: 091627b0, 1024 bytes
 	.word	0xCB000000 ; TexFlush
@@ -744,235 +744,235 @@ gpu_code2:
 	end
 
 monster_list:
-	;velociprey
-	.word	0x00000010
-	.word	0x00000000
+    ;velociprey
+    .word 0x00000010
+    .word 0x00000000
 	;popo
-	.word	0x00000046
-	.word	0x00D800D8
-	;genprey
-	.word	0x0000000D
-	.word	0x00000024
-	;ioprey
-	.word	0x0000001E
-	.word	0x00000048
-	;velocidrome
-	.word	0x0000001B
-	.word	0x0000006C
-	;gendrome
-	.word	0x0000001C
-	.word	0x00000090
-	;iodrome
-	.word	0x0000001F
-	.word	0x000000B4
-	;kelbi
-	.word	0x00000003
-	.word	0x000000D8
-	;kut_ku
-	.word	0x00000006
-	.word	0x00240000
-	;blue_kut_ku
-	.word	0x00000026
-	.word	0x00240000
-	;gypceros
-	.word	0x00000014
-	.word	0x00240024
-	;purple_gypceros
-	.word	0x00000027
-	.word	0x00240024
-	;cephadrome
-	.word	0x00000008
-	.word	0x00240048
-	;cephalos
-	.word	0x00000022
-	.word	0x00240048
-	;plesioth
-	.word	0x00000015
-	.word	0x0024006C
-	;green_plesioth
-	.word	0x0000002E
-	.word	0x0024006C
-	;rathalos
-	.word	0x0000000B
-	.word	0x00240090
-	;azure_rathalos
-	.word	0x00000031
-	.word	0x00240090
-	;silver_rathalos
-	.word	0x00000029
-	.word	0x00240090
-	;rathian
-	.word	0x00000001
-	.word	0x002400B4
-	;pink_rathian
-	.word	0x00000025
-	.word	0x002400B4
-	;gold_rathian
-	.word	0x0000002A
-	.word	0x002400B4
-	;vespoid
-	.word	0x00000013
-	.word	0x002400D8
-	;vespoid_queen
-	.word	0x00000050
-	.word	0x002400D8
-	;khezu
-	.word	0x0000000F
-	.word	0x00480000
-	;red_khezu
-	.word	0x0000002D
-	.word	0x00480000
-	;gravios
-	.word	0x00000011
-	.word	0x00480024
-	;black_gravios
-	.word	0x0000002F
-	.word	0x00480024
-	;basarios
-	.word	0x00000016
-	.word	0x00480048
-	;monoblos
-	.word	0x0000001A
-	.word	0x0048006C
-	;white_monoblos
-	.word	0x0000002C
-	.word	0x0048006C
-	;diablos
-	.word	0x0000000E
-	.word	0x00480090
-	;black_diablos
-	.word	0x0000002B
-	.word	0x00480090
-	;kirin
-	.word	0x00000021
-	.word	0x004800B4
-	;hornetaur
-	.word	0x00000018
-	.word	0x004800D8
-	;lao_shan_lung
-	.word	0x00000007
-	.word	0x006C0000
-	;ashen_lao_shan_lung
-	.word	0x00000032
-	.word	0x006C0000
-	;yian_garuga
-	.word	0x0000004E
-	.word	0x006C0024
-	;one_ear_yian_garuga
-	.word	0x00000028
-	.word	0x006C0024
-	;bulfango
-	.word	0x00000005
-	.word	0x006C0048
-	;bulldrome
-	.word	0x00000044
-	.word	0x006C0048
-	;blangonga
-	.word	0x00000033
-	.word	0x006C006C
-	;copper_blangonga
-	.word	0x00000054
-	.word	0x006C006C
-	;great_thunderbug
-	.word	0x00000038
-	.word	0x006C0090
-	;rajang
-	.word	0x00000035
-	.word	0x006C00B4
-	;furious_rajang
-	.word	0x00000059
-	.word	0x006C00B4
-	;apceros
-	.word	0x00000019
-	.word	0x006C00D8
-	;hermitaur
-	.word	0x00000042
-	.word	0x00900000
-	;daimyo_hermitaur
-	.word	0x00000030
-	.word	0x00900000
-	;plum_daimyo_hermitaur
-	.word	0x00000056
-	.word	0x00900000
-	;ceanataur
-	.word	0x00000049
-	.word	0x00900024
-	;shogun_ceanataur
-	.word	0x00000043
-	.word	0x00900024
-	;terra_shogun_ceanataur
-	.word	0x00000057
-	.word	0x00900024
-	;kushala
-	.word	0x00000036
-	.word	0x00900048
-	;rusted_kushala
-	.word	0x0000003C
-	.word	0x00900048
-	;chameleos
-	.word	0x0000003B
-	.word	0x0090006C
-	;lunastra
-	.word	0x00000040
-	.word	0x00900090
-	;teostra
-	.word	0x00000041
-	.word	0x009000B4
-	;aptonoth
-	.word	0x0000000C
-	.word	0x009000D8
-	;tigrex
-	.word	0x0000004B
-	.word	0x00B40000
-	;congalala
-	.word	0x00000034
-	.word	0x00B40048
-	;emerald_congalala
-	.word	0x00000055
-	.word	0x00B40048
-	;blango
-	.word	0x0000003D
-	.word	0x00B40090
-	;conga
-	.word	0x0000003E
-	.word	0x00B400B4
-	;felyne
-	.word	0x00000009
-	.word	0x00B400D8
-	;melynx
-	.word	0x00000017
-	.word	0x00D80000
-	;mosswine
-	.word	0x00000004
-	.word	0x00D80024
-	;giaprey
-	.word	0x00000023
-	.word	0x00D80048
-	;giadrome
-	.word	0x0000004D
-	.word	0x00D8006C
-	;remobra
-	.word	0x0000003F
-	.word	0x00D80090
-	;anteka
-	.word	0x00000045
-	.word	0x00D800B4
-	;lavasioth
-	.word	0x00000053
-	.word	0x00FC0000
-	;hypnocatrice
-	.word	0x00000052
-	.word	0x00FC0024
-	;yamatsukami
-	.word	0x00000048
-	.word	0x00FC0048
-	;shakalaka
-	.word	0x00000039
-	.word	0x00FC006C
-	;shengaoren
-	.word	0x00000037
-	.word	0x00FC0090
-	;nargacuga
-	.word	0x00000051
-	.word	0x00FC00B4
+    .word 0x00000046
+    .word 0x00D800D8
+    ;genprey
+    .word 0x0000000D
+    .word 0x00000024
+    ;ioprey
+    .word 0x0000001E
+    .word 0x00000048
+    ;velocidrome
+    .word 0x0000001B
+    .word 0x0000006C
+    ;gendrome
+    .word 0x0000001C
+    .word 0x00000090
+    ;iodrome
+    .word 0x0000001F
+    .word 0x000000B4
+    ;kelbi
+    .word 0x00000003
+    .word 0x000000D8
+    ;kut_ku
+    .word 0x00000006
+    .word 0x00240000
+    ;blue_kut_ku
+    .word 0x00000026
+    .word 0x00240000
+    ;gypceros
+    .word 0x00000014
+    .word 0x00240024
+    ;purple_gypceros
+    .word 0x00000027
+    .word 0x00240024
+    ;cephadrome
+    .word 0x00000008
+    .word 0x00240048
+    ;cephalos
+    .word 0x00000022
+    .word 0x00240048
+    ;plesioth
+    .word 0x00000015
+    .word 0x0024006C
+    ;green_plesioth
+    .word 0x0000002E
+    .word 0x0024006C
+    ;rathalos
+    .word 0x0000000B
+    .word 0x00240090
+    ;azure_rathalos
+    .word 0x00000031
+    .word 0x00240090
+    ;silver_rathalos
+    .word 0x00000029
+    .word 0x00240090
+    ;rathian
+    .word 0x00000001
+    .word 0x002400B4
+    ;pink_rathian
+    .word 0x00000025
+    .word 0x002400B4
+    ;gold_rathian
+    .word 0x0000002A
+    .word 0x002400B4
+    ;vespoid
+    .word 0x00000013
+    .word 0x002400D8
+    ;vespoid_queen
+    .word 0x00000050
+    .word 0x002400D8
+    ;khezu
+    .word 0x0000000F
+    .word 0x00480000
+    ;red_khezu
+    .word 0x0000002D
+    .word 0x00480000
+    ;gravios
+    .word 0x00000011
+    .word 0x00480024
+    ;black_gravios
+    .word 0x0000002F
+    .word 0x00480024
+    ;basarios
+    .word 0x00000016
+    .word 0x00480048
+    ;monoblos
+    .word 0x0000001A
+    .word 0x0048006C
+    ;white_monoblos
+    .word 0x0000002C
+    .word 0x0048006C
+    ;diablos
+    .word 0x0000000E
+    .word 0x00480090
+    ;black_diablos
+    .word 0x0000002B
+    .word 0x00480090
+    ;kirin
+    .word 0x00000021
+    .word 0x004800B4
+    ;hornetaur
+    .word 0x00000018
+    .word 0x004800D8
+    ;lao_shan_lung
+    .word 0x00000007
+    .word 0x006C0000
+    ;ashen_lao_shan_lung
+    .word 0x00000032
+    .word 0x006C0000
+    ;yian_garuga
+    .word 0x0000004E
+    .word 0x006C0024
+    ;one_ear_yian_garuga
+    .word 0x00000028
+    .word 0x006C0024
+    ;bulfango
+    .word 0x00000005
+    .word 0x006C0048
+    ;bulldrome
+    .word 0x00000044
+    .word 0x006C0048
+    ;blangonga
+    .word 0x00000033
+    .word 0x006C006C
+    ;copper_blangonga
+    .word 0x00000054
+    .word 0x006C006C
+    ;great_thunderbug
+    .word 0x00000038
+    .word 0x006C0090
+    ;rajang
+    .word 0x00000035
+    .word 0x006C00B4
+    ;furious_rajang
+    .word 0x00000059
+    .word 0x006C00B4
+    ;apceros
+    .word 0x00000019
+    .word 0x006C00D8
+    ;hermitaur
+    .word 0x00000042
+    .word 0x00900000
+    ;daimyo_hermitaur
+    .word 0x00000030
+    .word 0x00900000
+    ;plum_daimyo_hermitaur
+    .word 0x00000056
+    .word 0x00900000
+    ;ceanataur
+    .word 0x00000049
+    .word 0x00900024
+    ;shogun_ceanataur
+    .word 0x00000043
+    .word 0x00900024
+    ;terra_shogun_ceanataur
+    .word 0x00000057
+    .word 0x00900024
+    ;kushala
+    .word 0x00000036
+    .word 0x00900048
+    ;rusted_kushala
+    .word 0x0000003C
+    .word 0x00900048
+    ;chameleos
+    .word 0x0000003B
+    .word 0x0090006C
+    ;lunastra
+    .word 0x00000040
+    .word 0x00900090
+    ;teostra
+    .word 0x00000041
+    .word 0x009000B4
+    ;aptonoth
+    .word 0x0000000C
+    .word 0x009000D8
+    ;tigrex
+    .word 0x0000004B
+    .word 0x00B40000
+    ;congalala
+    .word 0x00000034
+    .word 0x00B40048
+    ;emerald_congalala
+    .word 0x00000055
+    .word 0x00B40048
+    ;blango
+    .word 0x0000003D
+    .word 0x00B40090
+    ;conga
+    .word 0x0000003E
+    .word 0x00B400B4
+    ;felyne
+    .word 0x00000009
+    .word 0x00B400D8
+    ;melynx
+    .word 0x00000017
+    .word 0x00D80000
+    ;mosswine
+    .word 0x00000004
+    .word 0x00D80024
+    ;giaprey
+    .word 0x00000023
+    .word 0x00D80048
+    ;giadrome
+    .word 0x0000004D
+    .word 0x00D8006C
+    ;remobra
+    .word 0x0000003F
+    .word 0x00D80090
+    ;anteka
+    .word 0x00000045
+    .word 0x00D800B4
+    ;lavasioth
+    .word 0x00000053
+    .word 0x00FC0000
+    ;hypnocatrice
+    .word 0x00000052
+    .word 0x00FC0024
+    ;yamatsukami
+    .word 0x00000048
+    .word 0x00FC0048
+    ;shakalaka
+    .word 0x00000039
+    .word 0x00FC006C
+    ;shengaoren
+    .word 0x00000037
+    .word 0x00FC0090
+    ;nargacuga
+    .word 0x00000051
+    .word 0x00FC00B4
 .close
