@@ -25,11 +25,8 @@ VERTEX_4 equ 0x0891C900
 VERTEX_5 equ 0x0891C904
 
 VCROSS_0 equ 0x0891E2C0
-VCROSS_1 equ 0x0891E2C4
-VCROSS_2 equ 0x0891E2C8
-VCROSS_3 equ 0x0891E2CC
-VCROSS_4 equ 0x0891E2D0
-VCROSS_5 equ 0x0891E2D4
+CROSSHAIR_SRC equ 0x0891D4B0
+CROSSHAIR_DES equ 0x097E0000
 
 .include "./src/gpu_macros.asm"
 
@@ -44,13 +41,13 @@ icon_y equ 55
 .createfile "./bin/VERTEX.bin", 0x0891E2C0
 .align 0x10
 vertices:
-    vertex      104, 16, 0xFFFFFF7F, icon_x - 10, icon_y, 0
-    vertex      118, 30, 0xFFFFFF7F, icon_x + 10, icon_y, 0
-    vertex      118, 16, 0xFFFFFF7F, icon_x, icon_y  - 10, 0
+    vertex      0, 0, 0xFFFFFFCC, icon_x -16, icon_y -16, 0
+    vertex      31, 31, 0xFFFFFFCC, icon_x + 16, icon_y + 16, 0
+    vertex      31, 0, 0xFFFFFFCC, icon_x + 16, icon_y  - 16, 0
 
-    vertex      104, 16, 0xFFFFFF7F, icon_x  - 10, icon_y, 0
-    vertex      104, 30, 0xFFFFFF7F, icon_x, icon_y + 10, 0
-    vertex      118, 30, 0xFFFFFF7F, icon_x + 10, icon_y, 0
+    vertex      0, 0, 0xFFFFFFCC, icon_x -16, icon_y -16, 0
+    vertex      31, 31, 0xFFFFFFCC, icon_x + 16, icon_y + 16, 0
+    vertex      0, 31, 0xFFFFFFCC, icon_x - 16, icon_y + 16, 0
 .close
 
 .createfile "./bin/TARGET_CHANGE_JP.bin", 0x0891CAA0
@@ -58,6 +55,21 @@ vertices:
 	sv.q	c000, 0x8(sp)
 	sw	ra, 0x4(sp)
 
+
+    li $t0, CROSSHAIR_SRC
+    li $t1, CROSSHAIR_DES
+    li $t2, 1024
+
+copy_loop:
+    lw $t3, 0($t0)
+    sw $t3, 0($t1)
+    addiu $t0, $t0, 4
+    addiu $t1, $t1, 4
+    addiu $t2, $t2, -1
+    bgtz $t2, copy_loop
+    nop
+
+skip_copy:
 	;=========================================
 	lio   $t1, TIMER
 	lw   $t2, 0($t1)
@@ -304,34 +316,6 @@ monster_icon:
 	lw t0, 0(t1)
 	lb t1, 0x1e8(t0)
 
-	;crosshair
-	/*
-	li $t0, 0x00100068	
-	li $t2, VCROSS_0	
-	sw $t0, 0($t2)	
-
-	li $t0, 0x0033FFFF	
-	li $t2, VCROSS_1	
-	sw $t0, 0($t2)	
-
-	li $t0, 0x00000035	
-	li $t2, VCROSS_2	
-	sw $t0, 0($t2)	
-
-	li $t0, 0x001E0076
-	li $t2, VCROSS_3	
-	sw $t0, 0($t2)	
-
-	li $t0, 0x0041FFFF	
-	li $t2, VCROSS_4	
-	sw $t0, 0($t2)	
-
-	li $t0, 0x00000043	
-	li $t2, VCROSS_5	
-	sw $t0, 0($t2)
-	*/
-
-
 	;list_size equ 0x004D
 loop_start:
 	li t0, 77 * 8 ; list_size
@@ -498,69 +482,67 @@ not_on_screen:
 	nop
 
 on_screen:
-	;vertex      104, 16, 0xFFFFFFFF, icon_x - 10, icon_y, 0
-    ;vertex      118, 30, 0xFFFFFFFF, icon_x + 10, icon_y, 0
-    ;vertex      118, 16, 0xFFFFFFFF, icon_x, icon_y  - 10, 0
-
-    ;vertex      104, 16, 0xFFFFFFFF, icon_x  - 10, icon_y, 0
-    ;vertex      104, 30, 0xFFFFFFFF, icon_x, icon_y + 10, 0
-    ;vertex      118, 30, 0xFFFFFFFF, icon_x + 10, icon_y, 0
-
 	;adjust x
 	mfv t0, s602
-	addi $t0, $t0, -10
+	addi $t0, $t0, -16
 	li $t1, VCROSS_0	
 	sh $t0, 0x8($t1)
 
 	mfv t0, s602
-	addi $t0, $t0, 10
+	addi $t0, $t0, 16
 	li $t1, VCROSS_0	
 	sh $t0, 0x18($t1)
 
 	mfv t0, s602
+	addi $t0, $t0, 16
 	li $t1, VCROSS_0	
 	sh $t0, 0x28($t1)
 
 	mfv t0, s602
-	addi $t0, $t0, -10
+	addi $t0, $t0, -16
 	li $t1, VCROSS_0	
 	sh $t0, 0x38($t1)
 
 	mfv t0, s602
+	addi $t0, $t0, 16
 	li $t1, VCROSS_0	
 	sh $t0, 0x48($t1)
 
 	mfv t0, s602
-	addi $t0, $t0, 10
+	addi $t0, $t0, -16
 	li $t1, VCROSS_0	
 	sh $t0, 0x58($t1)					
 
 	;adjust y
 	mfv t0, s612
+	addi $t0, $t0, -16
 	li $t1, VCROSS_0	
 	sh $t0, 0xa($t1)
 
 	mfv t0, s612
+	addi $t0, $t0, 16
 	li $t1, VCROSS_0	
 	sh $t0, 0x1a($t1)
 
 	mfv t0, s612
-	addi $t0, $t0, -10	
+	addi $t0, $t0, -16	
 	li $t1, VCROSS_0	
 	sh $t0, 0x2a($t1)
 
 	mfv t0, s612
+	addi $t0, $t0, -16
 	li $t1, VCROSS_0	
 	sh $t0, 0x3a($t1)
 
 	mfv t0, s612
-	addi $t0, $t0, 10	
+	addi $t0, $t0, 16	
 	li $t1, VCROSS_0	
 	sh $t0, 0x4a($t1)
 
 	mfv t0, s612
+	addi $t0, $t0, 16
 	li $t1, VCROSS_0	
-	sh $t0, 0x5a($t1)			
+	sh $t0, 0x5a($t1)
 
 skip_crosshair:
 	li t0, 0xFFFF	;light	
@@ -605,6 +587,7 @@ draw_crosshair:
 
 	li	a0, gpu_code2
 	li	a2, 0
+	
 	li	a3, 0
 	jal	sceGeListEnQueue; 
 	li	a1, 0x0
@@ -646,9 +629,10 @@ gpu_code:
 	finish
 	end
 gpu_code2:
-	.word 0xA01527A0 ; Texture address 0: low=1527a0
-	.word 0xA8090100 ; Texture stride 0: 0x0100, address high=09
-	.word 0xB8000808 ; Texture size 0: 512x256
+	.word 0xC2000000
+	.word 0xA07E0000 ; Texture address 0: low=1527a0
+	.word 0xA8090020 ; Texture stride 0: 0x0100, address high=09
+	.word 0xB8000505 ; Texture size 0: 512x256
 	.word 0xC500FF03 ; Clut format: 00ff03 (ABGR 8888)
 	.word 0xB01627b0 ; CLUT addr: low=1627b0
 	.word 0xB1090000 ; CLUT addr: high=09

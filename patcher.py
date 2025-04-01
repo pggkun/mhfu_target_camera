@@ -29,6 +29,7 @@ def patch(eboot_file):
     patch_binary(eboot_file, 0x0891C920 - EBOOT_BASE, input_path="bin/TARGET_CAM_JP.bin", input_bytes=None, output_path='temp.bin')
     patch_binary("temp.bin", 0x0891CAA0 - EBOOT_BASE, input_path="bin/TARGET_CHANGE_JP.bin", input_bytes=None, output_path='temp.bin')
     patch_binary("temp.bin", 0x0891E2C0 - EBOOT_BASE, input_path="bin/VERTEX.bin", input_bytes=None, output_path='temp.bin')
+    patch_binary("temp.bin", 0x0891D4B0 - EBOOT_BASE, input_path="bin/crosshair.bin", input_bytes=None, output_path='temp.bin')
     patch_binary("temp.bin", 0x000871F8 + BASE_RAM - EBOOT_BASE, input_bytes=b'\x48\x72\x24\x0A', output_path='temp.bin')
     patch_binary("temp.bin", 0x00069408 + BASE_RAM - EBOOT_BASE, input_bytes=b'\xA8\x72\x24\x0A', output_path=f"patched_{eboot_file}")
     os.remove("temp.bin")

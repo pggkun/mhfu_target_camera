@@ -68,4 +68,10 @@ file.write(
 )
 divide_file("bin/TARGET_CHANGE_JP.bin", amount)
 
+file.seek(0x0891D4B0)
+#file.seek(0x097E0000)
+file.write(f"crosshair")
+with open("bin/crosshair.bin", "rb") as bin:
+    file.write(bin.read())
+
 file.close()
