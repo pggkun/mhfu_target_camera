@@ -3,7 +3,10 @@
 Adds target camera, similar to that of Monster Hunter 4 to Monster Hunter Freedom Unite.
 
 
-https://github.com/user-attachments/assets/6df9f48c-a23f-4506-8646-f823e7f2a2d9
+
+
+https://github.com/user-attachments/assets/02b1270f-9c8a-45f4-9c3c-87644a94b8ec
+
 
 
 
