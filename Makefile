@@ -12,7 +12,7 @@ $(CHEAT_FILE):
 	mkdir -p bin
 	armips src/target_cam_mhfu_eu.asm
 	armips src/target_cam_mhp2ndg.asm
-	armips src/target_change_mhp2ndg.asm
+	python3 gen_crosshair.py
 	python3 gencwcheat.py
 
 modio:
@@ -33,6 +33,9 @@ armips:
 	install -Dm755 $(BUILD_DIR)/armips $(INSTALL_DIR)/armips
 
 patch:
+	rm -rf *.iso
+	rm -rf patched_*
+	cp tools/*.iso ./
 	python3 patcher.py
 	gcc tools/UMD-replace.c -o umd_replace
 	ls -la

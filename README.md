@@ -23,12 +23,12 @@ Pressing `L + DpadDown` will disable the target camera.
 
 If you don't want to use this feature as a cheat, you can patch your ISO. To do that, you'll need:
 
-- A MHP2ndG file in .iso format in the root of the project (it also works with MHFUComplete ISOs)
+- A MHP2ndG file in .iso format in the tools folder (it also works with MHFUComplete ISOs)
 - A decrypted EBOOT.BIN in the root of the project (you can get it using PPSSPP or UMD_Gen)
     - if you use a MHFUComplete iso, the eboot file should match!
 - Download [UMD-replace](https://www.romhacking.net/utilities/891/) and extract it into the tools folder
 
-Once you have all these files and the other dependencies, run `make` to compile the binaries and `make patch` to update your iso file.
+Once you have all these files and the other dependencies, run `make` to compile the binaries and `make patch` to generate your patched iso file.
 
 ## Notes
 
