@@ -369,13 +369,26 @@ monster_icon:
 	lb		t0, 0(t1)
 	beq		t0, 0xFFFFFFFF, skip_draw
 
-	;skip if mission completed
+	;skip if mission completed 
 	li		t0, 0x09A02228	
 	lbu		t1, 0(t0)	
 	li		t2, 0x30	
 	slt		t3, t2, t1
+	bne		t3, zero, check_dual_quest_end
+	nop
+	j skip_dual_test_check
+	
+check_dual_quest_end:
+	li		t0, 0x09A02230	
+	lbu		t1, 0(t0)
+	beq		t1, 0x0, skip_draw
+	nop
+
+	li		t2, 0x30	
+	slt		t3, t2, t1
 	bne		t3, zero, skip_draw
 
+skip_dual_test_check:
 	li		t1, SELECTED 
 	lw		t0, 0(t1) 
 
