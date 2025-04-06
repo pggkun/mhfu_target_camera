@@ -49,6 +49,7 @@ icon_y equ 55
 	lw		t2, 0(t1)
 	lio		t3, 0xFFFFFFFF
 	bne		t2, t3, no_monster
+	nop
 
 	lui		t0, (PLAYER_COORDINATES >> 16)
 	ori		t0, t0, (PLAYER_COORDINATES & 0xFFFF)
@@ -125,9 +126,6 @@ icon_y equ 55
 	and		t7,t7,t5
 	or		v0,t6,t7
 
-	lui		t0, 0x0999
-	ori		t0, t0, 0x8F00
-	sh		v0, 0(t0)
 	move 	a0, v0
 	j 		return
 	nop
@@ -172,7 +170,7 @@ vertices:
 	bnez	t3, skip_copy
 	nop
 
-	li		t2, 1024 + 32
+	li		t2, 264
 
 copy_loop:
 	lw		t3, 0(t0)
