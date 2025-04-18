@@ -27,7 +27,7 @@ VERTEX_5 equ 0x0891C904
 
 VCROSS_0 equ 0x0891E2C0
 CROSSHAIR_SRC equ 0x0891DDBC
-CROSSHAIR_DES equ 0x099E0000
+CROSSHAIR_DES equ 0x040E0000
 
 .include "./src/gpu_macros.asm"
 
@@ -739,12 +739,12 @@ gpu_code:
 
 gpu_code2:
 	.word	0xC2000000 ; TexMode linear
-	.word	0xA09E0000 ; Texture address 0: low=9E0000 (CROSSHAIR_DES - 9000000)
-	.word	0xA8090020 ; Texture stride 0: 0x0100, address high=09
+	.word	0xA00E0000 ; Texture address 0: low=9E0000 (CROSSHAIR_DES - 9000000)
+	.word	0xA8040020 ; Texture stride 0: 0x0100, address high=04
 	.word	0xB8000505 ; Texture size 0: 32x32
 	.word	0xC500FF03 ; Clut format: 00ff03 (ABGR 8888)
-	.word	0xB09E0400 ; CLUT addr: low=9E0400 (CROSSHAIR_DES + 0x400 -  0x9000000)
-	.word	0xB1090000 ; CLUT addr: high=09
+	.word	0xB00E0400 ; CLUT addr: low=9E0400 (CROSSHAIR_DES + 0x400 -  0x9000000)
+	.word	0xB1040000 ; CLUT addr: high=04
 	.word	0xC4000020 ; Clut load: 091627b0, 1024 bytes
 	.word	0xCB000000 ; TexFlush
 	.word	0x10080000 ; BASE: high=08
