@@ -18,7 +18,34 @@ def divide_file(filepath, text, amount, offset_0, offset_1):
             chunk += b'\x00' * pad
 
         file.write(f"{text} [{i+offset_0}/{amount+offset_1}]")
-        file.write(chunk)  
+        file.write(chunk)
+
+file = CwCheatIO("ULUS-10391.TXT")
+amount = 20
+file.seek(0x08920FA0)
+file.write(f"Target Cam [1/{amount+4}]")
+with open("bin/VERTEX_US.bin", "rb") as bin:
+    file.write(bin.read())
+
+file.seek(0x0891F600)
+file.write(f"Target Cam [2/{amount+4}]")
+with open("bin/TARGET_CAM_US.bin", "rb") as bin:
+    file.write(bin.read())
+
+file.write(f"Target Cam [3/{amount+4}]")
+file.write(
+    "_L 0x200874F4 0x0A247D80\n"
+)
+file.write(f"Target Cam [4/{amount+4}]")
+file.write(
+    "_L 0x20069410 0x0A247DE0\n"
+)
+file.seek(0x0891F780)
+divide_file("bin/TARGET_CHANGE_US.bin", "Target Cam", amount, 5, 4)
+
+file.seek(0x08920A9C)
+divide_file("bin/crosshair.bin", "Crosshair", 8, 1, 0)
+file.close()
 
 file = CwCheatIO("ULJM-05500.TXT")
 

@@ -6,28 +6,28 @@ BUTTON_DPAD_LEFT equ 0x00000080
 BUTTON_DPAD_UP equ 0x00000010
 BUTTON_DPAD_DOWN equ 0x00000040
 
-SELECTED equ 0x0891C908; TODO: Replace -> free ram starting here: 0x0891F300
-TRIGGER equ 0x0891C90C ; TODO: Replace
-MOD_TRIGGER equ 0x0891C910 ; TODO: Replace
+SELECTED equ 0x0891F5E8 ; DONE
+TRIGGER equ 0x0891F5EC ; DONE
+MOD_TRIGGER equ 0x0891F5F0 ; DONE
 BUTTONS_ADDR equ 0x08A62D88 ; DONE
 MONSTER_POINTER equ 0x09C12240 ;DONE
 PLAYER_COORDINATES equ 0x090B34B0 ; DONE
 PLAYER_AREA equ 0x09A45038 ; DONE
 
-TIMER equ 0x0891C620 ; TODO: Replace
+TIMER equ 0x0891F300 ; DONE
 
 sceGeListEnQueue equ 0x0890E200 ; DONE
 
-VERTEX_0 equ 0x0891C8F0 ; TODO: Replace
-VERTEX_1 equ 0x0891C8F4 ; TODO: Replace
-VERTEX_2 equ 0x0891C8F8 ; TODO: Replace
-VERTEX_3 equ 0x0891C8FC ; TODO: Replace
-VERTEX_4 equ 0x0891C900 ; TODO: Replace
-VERTEX_5 equ 0x0891C904 ; TODO: Replace
+VERTEX_0 equ 0x0891F5D0 ; DONE
+VERTEX_1 equ 0x0891F5D4 ; DONE
+VERTEX_2 equ 0x0891F5D8 ; DONE
+VERTEX_3 equ 0x0891F5DC ; DONE
+VERTEX_4 equ 0x0891F5E0 ; DONE
+VERTEX_5 equ 0x0891F5E4 ; DONE
 
-VCROSS_0 equ 0x0891E2C0 ; TODO: Replace
-CROSSHAIR_SRC equ 0x0891DDBC ; TODO: Replace
-CROSSHAIR_DES equ 0x040E0000 ; TODO: Replace
+VCROSS_0 equ 0x08920FA0 ; DONE
+CROSSHAIR_SRC equ 0x08920A9C ; DONE
+CROSSHAIR_DES equ 0x040E0000 ; DONE
 
 
 .include "./src/gpu_macros.asm"
@@ -41,7 +41,7 @@ icon_y equ 55
 .endmacro
 
 
-.createfile "./bin/TARGET_CAM_US.bin", 0x0891C920  ; TODO: Replace
+.createfile "./bin/TARGET_CAM_US.bin", 0x0891F600  ; DONE
 	addiu	sp, sp, -0x18
 	sv.q	c000, 0x8(sp)
 	sw		ra, 0x4(sp)
@@ -146,7 +146,7 @@ return:
 	j 		0x088874f8 ; DONE
 .close
 
-.createfile "./bin/VERTEX_US.bin", 0x0891E2C0  ; TODO: Replace
+.createfile "./bin/VERTEX_US.bin", 0x08920FA0  ; DONE
 .align 0x10
 vertices:
 	vertex	0, 0, 0xFFFFFFCC, icon_x -16, icon_y -16, 0
@@ -158,10 +158,11 @@ vertices:
 	vertex	0, 31, 0xFFFFFFCC, icon_x - 16, icon_y + 16, 0
 .close
 
-.createfile "./bin/TARGET_CHANGE_US.bin", 0x0891CAA0  ; TODO: Replace
-	addiu	sp, sp, -0x18
+.createfile "./bin/TARGET_CHANGE_US.bin", 0x0891F780  ; DONE
+	addiu	sp, sp, -0x28
 	sv.q	c000, 0x8(sp)
 	sw		ra, 0x4(sp)
+	sw		a0, 0x18(sp)
 
 
 	li		t0, CROSSHAIR_SRC
@@ -229,7 +230,7 @@ mod_stay:
 	nop
 	
 	lio		t0, SELECTED
-	lio		t1, 0x09C0D3C0  ; TODO: Replace
+	lio		t1, MONSTER_POINTER  ; TODO: Replace
 	sw		t1, 0(t0)
 
 check_pointer:
@@ -260,7 +261,7 @@ update_to_new:
 
 need_to_reset:
 	lio		t0, SELECTED
-	lio		t1, 0x09C0D3C0  ; TODO: Replace
+	lio		t1, MONSTER_POINTER  ; TODO: Replace
 	sw		t1, 0(t0)
 
 no_update_need:
@@ -333,7 +334,7 @@ set_left:
 	lw		t0, 0(t1)	
 	addiu		t0, t0, -4
 
-	lio		t2, 0x09C0D3C0  ; TODO: Replace
+	lio		t2, MONSTER_POINTER  ; TODO: Replace
 	sltu	t3, t0, t2
 	beq		t3, zero, not_less
 	nop
@@ -358,6 +359,9 @@ ret:
 	nop
 
 monster_icon:
+	j skip_dual_test_check
+	nop
+
 	;skip if loading
 	li		t1, 0x090AF424  ; TODO: Replace
 	lb		t0, 0(t1)
@@ -705,7 +709,11 @@ skip_draw:
 	lw		ra, 0x4(sp)
 	addiu	ra, ra, 0xC
 	lv.q	c000, 0x8(sp)
-	addiu	sp, sp, 0x18
+	lw		a0, 0x18(sp)
+	addiu	sp, sp, 0x28
+	
+	sh	a0,0x2D9A(v1)
+
 	j		0x08869414 ; DONE
 	nop
 
@@ -719,12 +727,12 @@ gpu_code:
 
 	.word	0xC2000001 ; TexMode swizzle, 0 levels, shared clut
 	.word	0xC3000005 ; TexFormat CLUT8
-	.word	0xA0197900 ; Texture address 0: low=1527a0  ; TODO: Replace
-	.word	0xA8090100 ; Texture stride 0: 0x0100, address high=09  ; TODO: Replace
+	.word	0xA019bd00 ; Texture address 0: low=1527a0  ; DONE
+	.word	0xA8090100 ; Texture stride 0: 0x0100, address high=09  ; DONE
 	.word	0xB8000908 ; Texture size 0: 512x256
 	.word	0xC500FF03 ; Clut format: 00ff03 (ABGR 8888)
-	.word	0xB01aa110 ; CLUT addr: low=1627b0  ; TODO: Replace
-	.word	0xB1090000 ; CLUT addr: high=09  ; TODO: Replace
+	.word	0xB01ae510 ; CLUT addr: low=1627b0  ; DONE
+	.word	0xB1090000 ; CLUT addr: high=09  ; DONE
 	.word	0xC4000020 ; Clut load: 091627b0, 1024 bytes
 	.word	0xCB000000 ; TexFlush
 	.word	0x10080000 ; BASE: high=08
@@ -740,12 +748,12 @@ gpu_code:
 
 gpu_code2:
 	.word	0xC2000000 ; TexMode linear
-	.word	0xA00E0000 ; Texture address 0: low=9E0000 (CROSSHAIR_DES - 9000000)  ; TODO: Replace
-	.word	0xA8040020 ; Texture stride 0: 0x0100, address high=04  ; TODO: Replace
+	.word	0xA00E0000 ; Texture address 0: low=9E0000 (CROSSHAIR_DES - 9000000)  ; DONE
+	.word	0xA8040020 ; Texture stride 0: 0x0100, address high=04  ; DONE
 	.word	0xB8000505 ; Texture size 0: 32x32
 	.word	0xC500FF03 ; Clut format: 00ff03 (ABGR 8888)
-	.word	0xB00E0400 ; CLUT addr: low=9E0400 (CROSSHAIR_DES + 0x400 -  0x9000000)  ; TODO: Replace
-	.word	0xB1040000 ; CLUT addr: high=04  ; TODO: Replace
+	.word	0xB00E0400 ; CLUT addr: low=9E0400 (CROSSHAIR_DES + 0x400 -  0x9000000)  ; DONE
+	.word	0xB1040000 ; CLUT addr: high=04  ; DONE
 	.word	0xC4000020 ; Clut load: 091627b0, 1024 bytes
 	.word	0xCB000000 ; TexFlush
 	.word	0x10080000 ; BASE: high=08
