@@ -41,7 +41,7 @@ icon_y equ 55
 .endmacro
 
 
-.createfile "./bin/TARGET_CAM_JP.bin", 0x0891C920
+.createfile "./bin/TARGET_CAM_US.bin", 0x0891C920  ; TODO: Replace
 	addiu	sp, sp, -0x18
 	sv.q	c000, 0x8(sp)
 	sw		ra, 0x4(sp)
@@ -143,10 +143,10 @@ return:
 	addiu	ra, ra, 0xC
 	lv.q	c000, 0x8(sp)
 	addiu	sp, sp, 0x18
-	j 		0x088871fc
+	j 		0x088874f8 ; DONE
 .close
 
-.createfile "./bin/VERTEX.bin", 0x0891E2C0
+.createfile "./bin/VERTEX_US.bin", 0x0891E2C0  ; TODO: Replace
 .align 0x10
 vertices:
 	vertex	0, 0, 0xFFFFFFCC, icon_x -16, icon_y -16, 0
@@ -158,7 +158,7 @@ vertices:
 	vertex	0, 31, 0xFFFFFFCC, icon_x - 16, icon_y + 16, 0
 .close
 
-.createfile "./bin/TARGET_CHANGE_JP.bin", 0x0891CAA0
+.createfile "./bin/TARGET_CHANGE_US.bin", 0x0891CAA0  ; TODO: Replace
 	addiu	sp, sp, -0x18
 	sv.q	c000, 0x8(sp)
 	sw		ra, 0x4(sp)
@@ -229,7 +229,7 @@ mod_stay:
 	nop
 	
 	lio		t0, SELECTED
-	lio		t1, 0x09C0D3C0
+	lio		t1, 0x09C0D3C0  ; TODO: Replace
 	sw		t1, 0(t0)
 
 check_pointer:
@@ -260,7 +260,7 @@ update_to_new:
 
 need_to_reset:
 	lio		t0, SELECTED
-	lio		t1, 0x09C0D3C0
+	lio		t1, 0x09C0D3C0  ; TODO: Replace
 	sw		t1, 0(t0)
 
 no_update_need:
@@ -333,7 +333,7 @@ set_left:
 	lw		t0, 0(t1)	
 	addiu		t0, t0, -4
 
-	lio		t2, 0x09C0D3C0
+	lio		t2, 0x09C0D3C0  ; TODO: Replace
 	sltu	t3, t0, t2
 	beq		t3, zero, not_less
 	nop
@@ -359,22 +359,22 @@ ret:
 
 monster_icon:
 	;skip if loading
-	li		t1, 0x090AF424
+	li		t1, 0x090AF424  ; TODO: Replace
 	lb		t0, 0(t1)
 	bne		t0, 0x0, skip_draw
 
 	;skip if paused
-	li		t1, 0x09A01A8B
+	li		t1, 0x09A01A8B  ; TODO: Replace
 	lb		t0, 0(t1)
 	bne		t0, 0x0, skip_draw
 
 	;skip when mission failed
-	li		t1, 0x09A01B1C
+	li		t1, 0x09A01B1C  ; TODO: Replace
 	lb		t0, 0(t1)
 	beq		t0, 0xFFFFFFFF, skip_draw
 
 	;skip if mission completed 
-	li		t0, 0x09A02228	
+	li		t0, 0x09A02228 ; TODO: Replace
 	lbu		t1, 0(t0)	
 	li		t2, 0x30	
 	slt		t3, t2, t1
@@ -383,7 +383,7 @@ monster_icon:
 	j skip_dual_test_check
 	
 check_dual_quest_end:
-	li		t0, 0x09A02230	
+	li		t0, 0x09A02230 ; TODO: Replace 
 	lbu		t1, 0(t0)
 	beq		t1, 0x0, skip_draw
 	nop
@@ -706,7 +706,7 @@ skip_draw:
 	addiu	ra, ra, 0xC
 	lv.q	c000, 0x8(sp)
 	addiu	sp, sp, 0x18
-	j		0x0886940C
+	j		0x08869414 ; DONE
 	nop
 
 .align 0X10
@@ -719,12 +719,12 @@ gpu_code:
 
 	.word	0xC2000001 ; TexMode swizzle, 0 levels, shared clut
 	.word	0xC3000005 ; TexFormat CLUT8
-	.word	0xA0197900 ; Texture address 0: low=1527a0
-	.word	0xA8090100 ; Texture stride 0: 0x0100, address high=09
+	.word	0xA0197900 ; Texture address 0: low=1527a0  ; TODO: Replace
+	.word	0xA8090100 ; Texture stride 0: 0x0100, address high=09  ; TODO: Replace
 	.word	0xB8000908 ; Texture size 0: 512x256
 	.word	0xC500FF03 ; Clut format: 00ff03 (ABGR 8888)
-	.word	0xB01aa110 ; CLUT addr: low=1627b0
-	.word	0xB1090000 ; CLUT addr: high=09
+	.word	0xB01aa110 ; CLUT addr: low=1627b0  ; TODO: Replace
+	.word	0xB1090000 ; CLUT addr: high=09  ; TODO: Replace
 	.word	0xC4000020 ; Clut load: 091627b0, 1024 bytes
 	.word	0xCB000000 ; TexFlush
 	.word	0x10080000 ; BASE: high=08
@@ -740,12 +740,12 @@ gpu_code:
 
 gpu_code2:
 	.word	0xC2000000 ; TexMode linear
-	.word	0xA00E0000 ; Texture address 0: low=9E0000 (CROSSHAIR_DES - 9000000)
-	.word	0xA8040020 ; Texture stride 0: 0x0100, address high=04
+	.word	0xA00E0000 ; Texture address 0: low=9E0000 (CROSSHAIR_DES - 9000000)  ; TODO: Replace
+	.word	0xA8040020 ; Texture stride 0: 0x0100, address high=04  ; TODO: Replace
 	.word	0xB8000505 ; Texture size 0: 32x32
 	.word	0xC500FF03 ; Clut format: 00ff03 (ABGR 8888)
-	.word	0xB00E0400 ; CLUT addr: low=9E0400 (CROSSHAIR_DES + 0x400 -  0x9000000)
-	.word	0xB1040000 ; CLUT addr: high=04
+	.word	0xB00E0400 ; CLUT addr: low=9E0400 (CROSSHAIR_DES + 0x400 -  0x9000000)  ; TODO: Replace
+	.word	0xB1040000 ; CLUT addr: high=04  ; TODO: Replace
 	.word	0xC4000020 ; Clut load: 091627b0, 1024 bytes
 	.word	0xCB000000 ; TexFlush
 	.word	0x10080000 ; BASE: high=08
