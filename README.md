@@ -35,7 +35,7 @@ Once you have all these files and the other dependencies, run `make` to compile 
 
 ## Notes
 
-For now, it only works on the Japanese `ULJM-05500` version, but I plan to implement it for the American `ULUS-10391` and European `ULES-01213` versions as well. It's working on PPSSPP and has also been tested on PSVita PCH-1000 and PSP 2000 using TempAR (unfortunately, for some reason, CWCheat causes some crashes).
+For now, it only works on the Japanese `ULJM-05500` and American `ULUS-10391` versions. It's working on PPSSPP and has also been tested on PSVita PCH-1000 and PSP 2000 using TempAR (unfortunately, for some reason, CWCheat causes some crashes).
 
 - [x] Target Cam
 - [x] Change target with `L + DpadLeft` or `L + DpadRight`
