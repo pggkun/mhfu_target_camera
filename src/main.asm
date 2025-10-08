@@ -1,0 +1,12 @@
+.org 0x0891C920
+.incbin "external/target_cam/bin/TARGET_CAM_JP.bin"
+.org 0x0891CAA0
+.incbin "external/target_cam/bin/TARGET_CHANGE_JP.bin"
+.org 0x0891E2C0
+.incbin "external/target_cam/bin/VERTEX.bin"
+.org 0x0891DDBC
+.incbin "external/target_cam/bin/crosshair.bin"
+.org 0x88871F8
+.word 0x0A247248
+.org 0x8869408
+.word 0x0A2472A8
