@@ -29,6 +29,8 @@ VCROSS_0 equ 0x0891E2C0
 CROSSHAIR_SRC equ 0x0891DDBC
 CROSSHAIR_DES equ 0x040E0000
 
+CONFIG_AREA equ 0x8A35850
+
 .include "./src/gpu_macros.asm"
 
 icon_x equ 30
@@ -44,6 +46,11 @@ icon_y equ 55
 	addiu	sp, sp, -0x18
 	sv.q	c000, 0x8(sp)
 	sw		ra, 0x4(sp)
+
+	la		t0, CONFIG_AREA
+	lb		t1, 0x1C(t0)
+	beq		t1, zero, no_monster
+	nop
 
 	li		t1, MOD_TRIGGER
 	lw		t2, 0(t1)
@@ -162,6 +169,10 @@ vertices:
 	sv.q	c000, 0x8(sp)
 	sw		ra, 0x4(sp)
 
+	la		t0, CONFIG_AREA
+	lb		t1, 0x1C(t0)
+	beq		t1, zero, ret
+	nop
 
 	li		t0, CROSSHAIR_SRC
 	li		t1, CROSSHAIR_DES
